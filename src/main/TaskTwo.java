@@ -30,27 +30,25 @@ public class TaskTwo {
 
         System.out.println("Value of function is " + Arrays.deepToString(function));
 
-        Double[][] dfdx2 = arrayW2;
-        Double[][] dz1dx0 = arrayW0;
-        Double[][] dz2dx1 = arrayW1;
-        Double[][] dotX1 = hadamardProduct(arrayW1, scalarMinusMatrix(arrayW1, 1.0));
-        Double[][] dotX2 = hadamardProduct(arrayW2, scalarMinusMatrix(arrayW2, 1.0));
+        Double[][] hadamardX1 = hadamardProduct(arrayW1, scalarMinusMatrix(arrayW1, 1.0));
+        Double[][] hadamardX2 = hadamardProduct(arrayW2, scalarMinusMatrix(arrayW2, 1.0));
 
-        Double[][] dx1dz1 = diagonalMatrix(dotX1);
-        Double[][] dx2dz2 = diagonalMatrix(dotX2);
+        Double[][] dx1dz1 = diagonalMatrix(hadamardX1);
+        Double[][] dx2dz2 = diagonalMatrix(hadamardX2);
 
-        Double[][] temp1 = matrixMultiply(dfdx2, dx2dz2);
-        Double[][] temp2 = matrixMultiply(temp1, dz2dx1);
+        Double[][] temp1 = matrixMultiply(arrayW2, dx2dz2);
+        Double[][] temp2 = matrixMultiply(temp1, arrayW1);
         Double[][] temp3 = matrixMultiply(temp2, dx1dz1);
-        Double[][] finalResult = matrixMultiply(temp3, dz1dx0);
+        Double[][] finalResult = matrixMultiply(temp3, arrayW0);
+
         System.out.println("Value of df/dx0 is " + Arrays.deepToString(finalResult));
         Double[][] finiteDiffenceAprox = finiteDiffAprox(functionPlus, functionMinus);
         System.out.println("Value of approximation is " + Arrays.deepToString(finiteDiffenceAprox));
 
-        double sumOfFirstColumn = sumElementsOfRow(finalResult, 0);
-        double sumOfSecondColumn = sumElementsOfRow(finalResult, 1);
-        System.out.println("Value of first derivative is " + sumOfFirstColumn);
-        System.out.println("Value of second derivative is " + sumOfSecondColumn);
+        double sumOfFirstRow = sumElementsOfRow(finalResult, 0);
+        double sumOfSecondRow = sumElementsOfRow(finalResult, 1);
+        System.out.println("Value of first derivative is " + sumOfFirstRow);
+        System.out.println("Value of second derivative is " + sumOfSecondRow);
 
     }
 
@@ -182,7 +180,6 @@ public class TaskTwo {
             } else {
                 result[r] = A[r] - scalar;
             }
-
         }
         return result;
     }
