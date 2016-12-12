@@ -24,22 +24,27 @@ public class TaskTwo {
 
         System.out.println("x0: " + Arrays.deepToString(x0));
 
-        Double[][] function = calculateFunction(arrayW0, arrayW1, arrayW2, x0);
         Double[][] functionPlus = calculateFunction(arrayW0,arrayW1,arrayW2,x0PlusEps);
         Double[][] functionMinus = calculateFunction(arrayW0,arrayW1,arrayW2,x0MinusEps);
 
+        Double[][] z1 = matrixMultiply1D(arrayW0, x0);
+        Double[][] sigma1 = sigmaEquation(z1);
+        Double[][] x1 = matrixMultiply(arrayW1, sigma1);
+        Double[][] sigma2 = sigmaEquation(x1);
+        Double[][] function = matrixMultiply(arrayW2, sigma2);
+
         System.out.println("Value of function is " + Arrays.deepToString(function));
 
-        Double[][] hadamardX1 = hadamardProduct(arrayW1, scalarMinusMatrix(arrayW1, 1.0));
-        Double[][] hadamardX2 = hadamardProduct(arrayW2, scalarMinusMatrix(arrayW2, 1.0));
+        Double[][] hadamardX1 = hadamardProduct(sigma1, scalarMinusMatrix(sigma1, 1.0));
+        Double[][] hadamardX2 = hadamardProduct(sigma2, scalarMinusMatrix(sigma2, 1.0));
 
         Double[][] dx1dz1 = diagonalMatrix(hadamardX1);
         Double[][] dx2dz2 = diagonalMatrix(hadamardX2);
 
-        Double[][] temp1 = matrixMultiply(arrayW2, dx2dz2);
-        Double[][] temp2 = matrixMultiply(temp1, arrayW1);
-        Double[][] temp3 = matrixMultiply(temp2, dx1dz1);
-        Double[][] finalResult = matrixMultiply(temp3, arrayW0);
+        Double[][] temp1 = matrixMultiply(dx1dz1, arrayW0);
+        Double[][] temp2 = matrixMultiply(arrayW1, temp1);
+        Double[][] temp3 = matrixMultiply(dx2dz2, temp2);
+        Double[][] finalResult = matrixMultiply(arrayW2, temp3);
 
         System.out.println("Value of df/dx0 is " + Arrays.deepToString(finalResult));
         Double[][] finiteDiffenceAprox = finiteDiffAprox(functionPlus, functionMinus);
@@ -50,12 +55,17 @@ public class TaskTwo {
         System.out.println("Value of first derivative is " + sumOfFirstRow);
         System.out.println("Value of second derivative is " + sumOfSecondRow);
 
+        if (sumOfFirstRow-finiteDiffenceAprox[0][0]< 0.0004 && sumOfSecondRow-finiteDiffenceAprox[1][0]< 0.0004) {
+            System.out.println(true);
+        } else {
+            System.out.println(false);
+        }
     }
 
     private static double sumElementsOfRow(Double[][] A, int column){
         double result = 0.0000;
-        for (Double[] aA : A) {
-            result += aA[column];
+        for (int i =0; i<A[0].length; i++) {
+            result += A[column][i];
         }
         return result;
     }
@@ -113,26 +123,15 @@ public class TaskTwo {
 
     private static Double[][] diagonalMatrix(Double[][] rowMatrix) {
         int aRows = rowMatrix.length;
-        Double[][] result = new Double[10][10];
+        Double[][] result = new Double[aRows][aRows];
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < aRows; i++) {
+            for (int j = 0; j < aRows; j++) {
                 result[i][j] = 0.00000;
             }
         }
-
-        for (int r = 0; r < aRows; r++) {
-            for (int c = 0; c < aRows; c++) {
-                if (r == c) {
-                    if (rowMatrix[r] == null) {
-                        result[r][c] = 0.00000;
-                    } else {
-                        result[r][c] = rowMatrix[r][c];
-                    }
-                } else {
-                    result[r][c] = 0.00000;
-                }
-            }
+        for (int i = 0; i<aRows;i++){
+            result[i][i] = rowMatrix[i][0];
         }
         return result;
     }
@@ -191,7 +190,7 @@ public class TaskTwo {
 
         for (int r = 0; r < zRows; r++) {
             for (int c = 0; c < zColumns; c++) {
-                result[r][c] = 1 / (Math.pow(Math.exp(1.0), -Z[r][c]) + 1);
+                result[r][c] = 1 / (Math.pow(Math.E, -Z[r][c]) + 1);
             }
         }
         return result;
