@@ -47,9 +47,22 @@ public class TaskTwo {
         Double[][] finiteDiffenceAprox = finiteDiffAprox(functionPlus, functionMinus);
         System.out.println("Value of approximation is " + Arrays.deepToString(finiteDiffenceAprox));
 
+        double sumOfFirstColumn = sumElementsOfRow(finalResult, 0);
+        double sumOfSecondColumn = sumElementsOfRow(finalResult, 1);
+        System.out.println("Value of first derivative is " + sumOfFirstColumn);
+        System.out.println("Value of second derivative is " + sumOfSecondColumn);
+
     }
 
-    private static Double[][] matrixMultiply1D(Double[][] A, Double[] B) {
+    private static double sumElementsOfRow(Double[][] A, int column){
+        double result = 0.0000;
+        for (Double[] aA : A) {
+            result += aA[column];
+        }
+        return result;
+    }
+
+    public static Double[][] matrixMultiply1D(Double[][] A, Double[] B) {
         int aRows = A.length;
         int aColumns = A[0].length;
         int bRows = B.length;
@@ -69,7 +82,7 @@ public class TaskTwo {
         for (int i = 0; i < aRows; i++) { // aRow
             for (int j = 0; j < bColumns; j++) { // bRows
                 for (int k = 0; k < aColumns; k++) { // aColumn
-                    C[i][j] += A[i][k] * B[j];
+                    C[i][j] += A[i][k] * B[k];
                 }
             }
         }
@@ -164,8 +177,6 @@ public class TaskTwo {
         Double[] result = new Double[aRows];
 
         for (int r = 0; r < aRows; r++) {
-
-
             if (i == 0) {
                 result[r] = A[r] + scalar;
             } else {
@@ -203,7 +214,7 @@ public class TaskTwo {
         return result;
     }
 
-    private static Double[][] matrixMultiply(Double[][] A, Double[][] B) {
+    public static Double[][] matrixMultiply(Double[][] A, Double[][] B) {
         int aRows = A.length;
         int aColumns = A[0].length;
         int bRows = B.length;
