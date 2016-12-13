@@ -6,7 +6,7 @@ package main;
  */
 public class MatrixOperations {
 
-    static double sumElementsOfRow(Double[][] A, int column) {
+    public static double sumElementsOfRow(Double[][] A, int column) {
         double result = 0.0000;
         for (int i = 0; i < A[0].length; i++) {
             result += A[column][i];
@@ -94,7 +94,7 @@ public class MatrixOperations {
         return result;
     }
 
-    static Double[][] hadamardProduct(Double[][] A, Double[][] B) {
+    public static Double[][] hadamardProduct(Double[][] A, Double[][] B) {
         int aRows = A.length;
         int aColumns = A[0].length;
         Double[][] result = new Double[aRows][aColumns];

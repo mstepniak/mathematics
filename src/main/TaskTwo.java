@@ -52,8 +52,8 @@ public class TaskTwo {
 
         double sumOfFirstRow = MatrixOperations.sumElementsOfRow(finalResult, 0);
         double sumOfSecondRow = MatrixOperations.sumElementsOfRow(finalResult, 1);
-        System.out.println("Value of first derivative is " + sumOfFirstRow);
-        System.out.println("Value of second derivative is " + sumOfSecondRow);
+        Double[][] derivative = {{sumOfFirstRow},{sumOfSecondRow}};
+        System.out.println("Value of derivative is    " + Arrays.deepToString(derivative));
 
         if (sumOfFirstRow - finiteDiffenceAprox[0][0] < 0.0004 && sumOfSecondRow - finiteDiffenceAprox[1][0] < 0.0004) {
             System.out.println(true);
