@@ -12,7 +12,6 @@ public class TaskOne {
     public static void main(String[] args) {
 
         Double[] arrayX = GenerateMatrix.listOneDim(5);
-        //generateMatrix.printOneDim();
         Double[] arrayDx = new Double[5];
         Double[] jacobian = new Double[5];
 
@@ -30,20 +29,12 @@ public class TaskOne {
             System.out.println(n + " ");
         }
         for (int i = 0; i < jacobian.length; i++) {
-            jacobian[i] = (Math.pow(arrayX[i]+eps, 2.0)-Math.pow(arrayX[i]-eps, 2.0))/2*eps;
-            if (jacobian[i]< testValue) {
+            jacobian[i] = (Math.pow(arrayX[i] + eps, 2.0) - Math.pow(arrayX[i] - eps, 2.0)) / 2 * eps;
+            if (jacobian[i] < testValue) {
                 System.out.println(true);
-            }
-            else {
+            } else {
                 System.out.println(false);
             }
-        }
-    }
-
-    public static class MyUnit {
-
-        public String concatenate(String one, String two) {
-            return one + two;
         }
     }
 }
